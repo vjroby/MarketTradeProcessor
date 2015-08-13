@@ -15,4 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/view-messages', function(){
+   return view('socket');
+});
 
