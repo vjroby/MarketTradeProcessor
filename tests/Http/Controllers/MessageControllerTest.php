@@ -18,7 +18,7 @@ class MessageControllerTest extends TestCase
     {
         $this->createMockObjects();
         $this->app->instance("MarketTradeProcessor\Repositories\ArdentMessageRepository", $this->messageRepositoryMock);
-        $this->messageRepositoryMock->shouldReceive("insertMessage")->once()->with(new \Symfony\Component\HttpFoundation\ParameterBag($this->getPostMessageDummy()));
+        $this->messageRepositoryMock->shouldReceive("manageMessages")->once()->with(new \Symfony\Component\HttpFoundation\ParameterBag($this->getPostMessageDummy()));
 
         $response =  $this->call("POST", "/message",[],[],[],[], json_encode($this->getPostMessageDummy()));
         $this->assertEquals(\Illuminate\Http\Response::HTTP_CREATED, $response->getStatusCode());

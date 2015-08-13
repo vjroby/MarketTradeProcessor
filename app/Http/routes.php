@@ -19,3 +19,4 @@ Route::get('/view-messages', function(){
    return view('socket');
 });
 
+Route::post('/message', 'MessageController@');
