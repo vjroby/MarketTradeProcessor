@@ -14,7 +14,7 @@
         </div>
     </div>
     <script>
-        var socket = io.connect('http://192.168.80.80:8890');
+        var socket = io.connect('http://192.168.33.11:8890');
         socket.on('message', function (data) {
             $( "#messages" ).append( "<p>"+data+"</p>" );
         });

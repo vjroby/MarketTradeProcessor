@@ -10,5 +10,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Message extends Model
 {
+    protected $fillable = [
+        'userId',
+        'currencyFrom',
+        'currencyTo',
+        'amountSell',
+        'amountBuy',
+        'rate',
+        'timePlaced',
+        'timePlaced',
+        'originatingCountry',
+    ];
+
 
 } // end of class
