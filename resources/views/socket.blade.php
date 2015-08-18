@@ -39,8 +39,15 @@
 
     <script>
         var socket = io.connect(app.getSocketUrlAndHost());
-        socket.on('message', function (data) {
+        socket.on('message', function (dataJson) {
+            app.loadOn();
+            var data = [JSON.parse(dataJson)];
             app.loadMessagesToTable(data);
+            app.addNewInfo('New Message added')
+            setTimeout(function(){
+                app.loadOff();
+
+            },400);
         });
         $(document).ready(function(){
            app.getMessages();

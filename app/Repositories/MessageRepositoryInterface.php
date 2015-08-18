@@ -10,15 +10,20 @@ namespace App\Repositories;
 
 
 use Illuminate\Database\Eloquent\Collection;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 interface MessageRepositoryInterface
 {
+    const TIME_PLACED = 'timePlaced';
+    const AMOUNT_SELL = 'amountSell';
+    const AMOUNT_BUY = 'amountBuy';
+    const RATE = 'rate';
     /**
      * Method for proce
-     * @param array $messages
+     * @param array $message
      * @return mixed
      */
-    public function manageMessages(array $messages);
+    public function manageMessages(ParameterBag $message);
 
     /**
      * @return Collection

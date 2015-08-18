@@ -22,4 +22,5 @@ class Message extends Model
     ];
 
 
+
 } // end of class

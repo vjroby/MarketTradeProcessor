@@ -72,5 +72,6 @@ var app = {
             '</button>'+text+'</div>';
 
         $('.panel').append(htlm);
-    }
+    },
+
 };

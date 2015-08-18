@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\MessageRepositoryInterface;
 use Response;
+use Input;
 
 /**
  * Created for MarketTradeProcessor.
