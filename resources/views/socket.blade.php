@@ -13,7 +13,6 @@
     </div>
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-info">
-            <div class="panel-heading">Message viwer</div>
             <div class="panel-body">
 
             </div>
@@ -39,7 +38,7 @@
     </div>
 
     <script>
-        var socket = io.connect('http://192.168.33.11:8890');
+        var socket = io.connect(app.getSocketUrlAndHost());
         socket.on('message', function (data) {
             app.loadMessagesToTable(data);
         });

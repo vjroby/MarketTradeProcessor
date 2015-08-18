@@ -1,18 +1,20 @@
 var app = {
-
+    SOCKET_PORT:8890,
     APP_URL:"",
 
     getMessages: function getMessages(){
 
         var that = this;
+        that.loadOn();
         $.ajax({
             url: this.APP_URL + "/message",
             dataType:"json",
             error: function(error){
-
+                this.loadOff();
             },
             success:function(data){
                 that.loadMessagesToTable(data);
+                that.loadOff();
             }
 
         });
@@ -20,7 +22,6 @@ var app = {
     },
 
     setAppUrl: function setAppUrl(url){
-        console.log("url set"+url);
         this.APP_URL = url;
     },
 
@@ -28,7 +29,9 @@ var app = {
         return this.APP_URL;
     },
     loadMessagesToTable:function(data){
-        console.log(data);
+        if (data.length == 0){
+            this.addNewInfo('There are no messages in the database');
+        }
         for(var i= 0 ; data.length > i ; i++){
 
             $(".messages-table > tbody").prepend('<tr>' +
@@ -44,11 +47,30 @@ var app = {
                 '</tr>')
         }
     },
-    loadOn: function(){
-
+    loadOn: function loadOn(){
+        $(".load-bar").removeClass("hidden");
     },
-    //http://codepen.io/WhiteWolfWizard/pen/emPJYx
-    loadOff: function(){
+    loadOff: function loadOff(){
+        $(".load-bar").addClass("hidden");
+    },
+    getSocketUrlAndHost: function getSocketUrlAndHost(){
+        return this.APP_URL+":"+this.SOCKET_PORT;
+    },
 
+    addNewInfo: function addNewInfo(text){
+        var alert = $(".alert");
+
+        if (alert.length !=0){
+            alert.each(function(){
+                this.remove();
+            });
+        }
+
+        var htlm = '<div class="alert alert-info alert-dismissible fade in" role="alert">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">×</span>' +
+            '</button>'+text+'</div>';
+
+        $('.panel').append(htlm);
     }
 };
