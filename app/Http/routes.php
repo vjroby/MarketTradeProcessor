@@ -19,4 +19,5 @@ Route::get('/view-messages', function(){
    return view('socket');
 });
 
-Route::post('/message', 'MessageController@');
+Route::post('/message', 'MessageController@store');
+Route::get('/message', 'MessageController@index');

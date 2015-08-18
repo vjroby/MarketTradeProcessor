@@ -18,7 +18,6 @@ class Message extends Model
         'amountBuy',
         'rate',
         'timePlaced',
-        'timePlaced',
         'originatingCountry',
     ];
 

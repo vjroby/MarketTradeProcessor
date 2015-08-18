@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\MessageRepositoryInterface;
+use Response;
 
 /**
  * Created for MarketTradeProcessor.
@@ -9,7 +10,7 @@ use App\Repositories\MessageRepositoryInterface;
  * Date: 8/13/15
  * Time: 13:30
  */
-class MessageController
+class MessageController extends Controller
 {
     /**
      * @var MessageRepositoryInterface
@@ -33,6 +34,11 @@ class MessageController
 
 
         return Response::make("", \Illuminate\Http\Response::HTTP_CREATED);
+    }
+
+    public function index()
+    {
+        return Response::json($this->messageRepository->getAllMessages());
     }
 
 } // end of class

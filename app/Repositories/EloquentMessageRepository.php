@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 
 use App\Models\Message;
+use Illuminate\Database\Eloquent\Collection;
 
 class EloquentMessageRepository implements MessageRepositoryInterface
 {
@@ -26,6 +27,24 @@ class EloquentMessageRepository implements MessageRepositoryInterface
         $this->messages = $messages;
     }
 
+
+    /**
+     * @return Collection
+     */
+    public function getAllMessages()
+    {
+        return $this->messages->orderBy('messages.created_at','DESC')->get([
+            'id',
+            'userId',
+            'currencyFrom',
+            'currencyTo',
+            'amountSell',
+            'amountBuy',
+            'rate',
+            'timePlaced',
+            'originatingCountry',
+        ]);
+    }
 
     /**
      * Method for proce

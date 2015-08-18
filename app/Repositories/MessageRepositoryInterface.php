@@ -9,6 +9,8 @@
 namespace App\Repositories;
 
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface MessageRepositoryInterface
 {
     /**
@@ -17,4 +19,9 @@ interface MessageRepositoryInterface
      * @return mixed
      */
     public function manageMessages(array $messages);
+
+    /**
+     * @return Collection
+     */
+    public function getAllMessages();
 } // end of class
