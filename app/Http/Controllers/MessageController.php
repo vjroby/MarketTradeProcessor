@@ -33,7 +33,6 @@ class MessageController extends Controller
 
         $this->messageRepository->manageMessages($messages);
 
-
         return Response::make("", \Illuminate\Http\Response::HTTP_CREATED);
     }
 

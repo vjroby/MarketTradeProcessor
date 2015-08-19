@@ -14,72 +14,105 @@ class MessageControllerTest extends TestCase
      */
     protected $messageRepositoryMock;
 
+    public function testGettMessage()
+    {
+        $this->createMockObjects();
+        $this->withoutMiddleware();
+
+        $this->messageRepositoryMock->shouldReceive("getAllMessages")->once()
+        ->andReturn($this->getMessageDummy());
+
+        $response =  $this->call("GET", "/message");
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_OK, $response->getStatusCode());
+        $data = json_decode($response->content(), true);
+
+        $this->assertEquals($this->getMessageDummy(), $data);
+    }
+
     public function testPostMessage()
     {
         $this->createMockObjects();
-        $this->app->instance("MarketTradeProcessor\Repositories\ArdentMessageRepository", $this->messageRepositoryMock);
-        $this->messageRepositoryMock->shouldReceive("manageMessages")->once()->with(new \Symfony\Component\HttpFoundation\ParameterBag($this->getPostMessageDummy()));
+        $this->withoutMiddleware();
+
+        $this->messageRepositoryMock->shouldReceive("manageMessages")->once();
 
         $response =  $this->call("POST", "/message",[],[],[],[], json_encode($this->getPostMessageDummy()));
         $this->assertEquals(\Illuminate\Http\Response::HTTP_CREATED, $response->getStatusCode());
     }
 
-    /**
-     * @expectedException ValidationException
-     */
     public function testInvalidUserId()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['userId']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
-    /**
-     * @expectedException ValidationException
-     */
+
     public function testInvalidCurrencyFrom()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['currencyFrom']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
-    /**
-     * @expectedException ValidationException
-     */
     public function testInvalidCurrencyTo()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['currencyTo']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
-    /**
-     * @expectedException ValidationException
-     */
     public function testInvalidAmountSell()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['amountSell']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
-    /**
-     * @expectedException ValidationException
-     */
     public function testInvalidAmountBuy()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['amountBuy']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
-    /**
-     * @expectedException ValidationException
-     */
     public function testInvalidRate()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['rate']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
-    /**
-     * @expectedException ValidationException
-     */
     public function testInvalidTimePlaced()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['timePlaced']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
-    /**
-     * @expectedException ValidationException
-     */
     public function testInvalidOriginatingCountry()
     {
+        $this->withoutMiddleware();
 
+        $dummy = $this->getPostMessageDummy();
+        unset($dummy['originatingCountry']);
+        $response =  $this->call("POST", "/message",[],[],[],[], json_encode($dummy));
+        $this->assertEquals(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
 
@@ -91,21 +124,52 @@ class MessageControllerTest extends TestCase
             "currencyFrom" => "EUR",
             "currencyTo" => "GBP",
             "amountSell" => 1000,
-            "amountBuy" => 747.10,
+            "amountBuy" => 747.1,
             "rate" =>  0.7471,
             "timePlaced" =>  "12-JUL-15 02:13:23",
             "originatingCountry"=> "RO"
         ];
     }
 
+    protected function getMessageDummy()
+    {
+        return [
+            [
+                "id" => 321,
+                "userId"=> "565",
+                "currencyFrom" => "USD",
+                "currencyTo" => "RON",
+                "amountSell" => 1000,
+                "amountBuy" => 747.1,
+                "rate" =>  0.7471,
+                "timePlaced" =>  "12-JUL-12 02:13:23",
+                "originatingCountry"=> "RO"
+            ],
+            [
+                "id" => 322,
+                "userId"=> "565",
+                "currencyFrom" => "USD",
+                "currencyTo" => "RON",
+                "amountSell" => 1000,
+                "amountBuy" => 747.1,
+                "rate" =>  0.7471,
+                "timePlaced" =>  "12-JUL-12 02:13:23",
+                "originatingCountry"=> "RO"
+            ],
+        ];
+    }
+
     public function createMockObjects()
     {
-        $this->messageRepositoryMock = m::mock("MarketTradeProcessor\Repositories\ArdentMessageRepository");
+        $this->messageRepositoryMock = m::mock("App\Repositories\EloquentMessageRepository");
+        $this->app->instance("App\Repositories\EloquentMessageRepository", $this->messageRepositoryMock);
+
     }
 
     public function run(PHPUnit_Framework_TestResult $result = null)
     {
-        $this->createMockObjects();
-        return parent::run($result); // TODO: Change the autogenerated stub
+
+        return parent::run($result);
+
     }
 }

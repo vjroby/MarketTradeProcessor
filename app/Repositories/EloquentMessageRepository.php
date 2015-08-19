@@ -66,7 +66,8 @@ class EloquentMessageRepository implements MessageRepositoryInterface
         $this->validateMessage($message);
         $message[self::TIME_PLACED] = new Carbon($message[self::TIME_PLACED]);
 
-        $dataBseMessage = $this->messages->create($message);
+        $dataBseMessage = $this->messages->newInstance($message);
+        $dataBseMessage->save();
 
         return  $dataBseMessage;
     }
