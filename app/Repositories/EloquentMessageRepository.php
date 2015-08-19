@@ -9,10 +9,12 @@
 namespace App\Repositories;
 
 
+use App\Exceptions\ValidationException;
 use App\Models\Message;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Validator;
 
 class EloquentMessageRepository implements MessageRepositoryInterface
 {
@@ -36,15 +38,15 @@ class EloquentMessageRepository implements MessageRepositoryInterface
     public function getAllMessages()
     {
         return $this->messages->orderBy('messages.created_at','DESC')->get([
-            'id',
-            'userId',
-            'currencyFrom',
-            'currencyTo',
-            'amountSell',
-            'amountBuy',
-            'rate',
-            'timePlaced',
-            'originatingCountry',
+            self::ID,
+            self::USER_ID,
+            self::CURRENCY_FROM,
+            self::CURRENCY_TO,
+            self::AMOUNT_SELL,
+            self::AMOUNT_BUY,
+            self::RATE,
+            self::TIME_PLACED,
+            self::ORIGINATING_COUNTRY,
         ]);
     }
 
@@ -61,6 +63,7 @@ class EloquentMessageRepository implements MessageRepositoryInterface
 
     protected function saveMessageToDatabase( $message)
     {
+        $this->validateMessage($message);
         $message[self::TIME_PLACED] = new Carbon($message[self::TIME_PLACED]);
 
         $dataBseMessage = $this->messages->create($message);
@@ -76,5 +79,26 @@ class EloquentMessageRepository implements MessageRepositoryInterface
         $message[self::RATE] = number_format($message[self::RATE],4,'.','');
         $redis = \LRedis::connection();
         $redis->publish('message', $message->toJson());
+    }
+
+    protected function validateMessage($message)
+    {
+        $validator =  Validator::make(
+            $message,
+            [
+                self::USER_ID => ['required', 'numeric'],
+                self::CURRENCY_FROM => ['required', 'alpha_num','max:3'],
+                self::CURRENCY_TO => ['required', 'alpha_num','max:3'],
+                self::AMOUNT_SELL => ['required', 'numeric'],
+                self::AMOUNT_BUY => ['required', 'numeric'],
+                self::RATE => ['required', 'numeric'],
+                self::TIME_PLACED => ['required', 'date'],
+                self::ORIGINATING_COUNTRY => ['required', 'alpha_num'],
+            ]
+        );
+
+        if ($validator->fails()){
+            throw new ValidationException($validator->messages());
+        }
     }
 } // end of class

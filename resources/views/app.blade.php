@@ -10,8 +10,13 @@
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <meta name="csrf-token" content="<?php echo csrf_token() ?>"/>
 <script type="application/javascript">
-
+    $(function () {
+        $.ajaxSetup({
+            headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
+        });
+    });
        app.setAppUrl("{{ URL::to('/') }}");
 </script>
 </head>
@@ -26,5 +31,12 @@
     </div>
     @yield('content')
 </div>
+<script>
+    $(function () {
+        $.ajaxSetup({
+            headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
+        });
+    });
+</script>
 </body>
 </html>

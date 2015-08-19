@@ -18,6 +18,13 @@ Route::get('/', function () {
 Route::get('/view-messages', function(){
    return view('socket');
 });
+Route::group(['middleware' => ['own.auth']], function(){
+    Route::post('/message', 'MessageController@store');
+});
 
-Route::post('/message', 'MessageController@store');
-Route::get('/message', 'MessageController@index');
+
+Route::group(['middleware' => ['csrf']], function(){
+    Route::get('/message', 'MessageController@index');
+
+
+});

@@ -14,10 +14,15 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 interface MessageRepositoryInterface
 {
-    const TIME_PLACED = 'timePlaced';
+    const ID = 'id';
+    const USER_ID = 'userId';
+    const CURRENCY_FROM = 'currencyFrom';
+    const CURRENCY_TO = 'currencyTo';
     const AMOUNT_SELL = 'amountSell';
     const AMOUNT_BUY = 'amountBuy';
     const RATE = 'rate';
+    const TIME_PLACED = 'timePlaced';
+    const ORIGINATING_COUNTRY = 'originatingCountry';
     /**
      * Method for proce
      * @param array $message

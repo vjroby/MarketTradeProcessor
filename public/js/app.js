@@ -9,8 +9,10 @@ var app = {
         $.ajax({
             url: this.APP_URL + "/message",
             dataType:"json",
+            headers: that.createHeadersForRequests(),
             error: function(error){
-                this.loadOff();
+                that.addNewInfo("There was an error. "+error.responseText);
+                that.loadOff();
             },
             success:function(data){
                 that.loadMessagesToTable(data);
@@ -34,7 +36,7 @@ var app = {
         }
         for(var i= 0 ; data.length > i ; i++){
 
-            $(".messages-table > tbody").prepend('<tr>' +
+            $(".messages-table > tbody").prepend('<tr  class="success">' +
                 '<td>'+data[i].id+'</td>'+
                 '<td>'+data[i].userId+'</td>'+
                 '<td>'+data[i].currencyFrom+'</td>'+
@@ -44,8 +46,15 @@ var app = {
                 '<td>'+data[i].rate+'</td>'+
                 '<td>'+data[i].timePlaced+'</td>'+
                 '<td>'+data[i].originatingCountry+'</td>'+
-                '</tr>')
+                '</tr>').find('tr').each(function(){
+
+                var elem = this;
+                setTimeout(function(){
+                    elem.removeAttribute("class");
+                },800)
+            });
         }
+
     },
     loadOn: function loadOn(){
         $(".load-bar").removeClass("hidden");
@@ -73,5 +82,12 @@ var app = {
 
         $('.panel').append(htlm);
     },
+
+    createHeadersForRequests: function createHeadersForRequests(){
+        return {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') ,
+            'Authorization':"eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0."
+        };
+    }
 
 };
