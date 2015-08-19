@@ -17,7 +17,7 @@
 
             </div>
         </div>
-        <a class="btn btn-default" href="#" role="button">Reload</a>
+        <a class="btn btn-default" href="{{ URL::to("/view-messages") }}" role="button">Reload</a>
         <table class="table table-striped messages-table">
             <thead>
             <tr>
