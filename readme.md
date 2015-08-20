@@ -43,6 +43,10 @@ The type of security is very basic a JWT will be sent in a header key `X-Authori
 The JWT can be set to expire and be created with user credentials or other type of Oauth 2.0
 
 The API method for getting the messages is GET /message ,it will return all the messages from the database.
+When the user enters in the view-messages page an AJAX call will be made to the server to get the messages.
+It uses `csrf` as a security method for AJAX reuqests.
+
+The tests are run using PHPUnit 4.8.3. Just run `phpunit` in the root of the project.
 
 Improvement features:
 
