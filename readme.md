@@ -1,27 +1,52 @@
-## Laravel PHP Framework
+Market Trade Processor
+======================
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+Technologies used:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+- Laravel 5.1 PHP Framework
+- Blade as a template engine
+- Twitter Bootstrap 3.2
+- jQuery 1.11
+- Node.Js
+- Socket.IO
+- Redis as a queueing system
+- MySQL 5.6
+- PHPUnit 4.8 for running tests
+- Vagrant Ubuntu 14 64bit box
+- Jmeter 2.3 and Postman (Chrome extension) for API testing
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+The project was develop in a Vagrant box.
+The API method for receiving messages is POST /message.
+The message will be save in a database and put in the Redis queue. A Node.Js server is listening for the Redis messages.
+When a message is sent the Node.Js will sent the message through web socket using Socket.Io to all front end clients.
+The user will see the nea message in the list with an explanatory information.
 
-## Official Documentation
+Accepts JSON object in this structure
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+        {
+          "userId": "433",
+          "currencyFrom": "RON",
+          "currencyTo": "GBP",
+          "amountSell": 1200,
+          "amountBuy": 747.1,
+          "rate": 12.71,
+          "timePlaced": "1-JUL-11 10:27:44",
+          "originatingCountry": "RO"
+        }
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+If the request was successful an HTTP CREATED (201) will be sent back.
+In case of a validation error an HTTP BAD REQUEST (401) will be sent with an explanatory message of the error.
+In case of an authorization error an HTTP UNAUTHORIZED (400) will be sent.
 
-## Security Vulnerabilities
+The type of security is very basic a JWT will be sent in a header key `X-Authorization` and the same JWT is set on the server.
+The JWT can be set to expire and be created with user credentials or other type of Oauth 2.0
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+The API method for getting the messages is GET /message ,it will return all the messages from the database.
 
-### License
+Improvement features:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+- Oauth 2.0 implementation for APIs securities with JWT
+- Multiple views of messages
+- Search and pagination implementation in view messages
+- Sorting of messages

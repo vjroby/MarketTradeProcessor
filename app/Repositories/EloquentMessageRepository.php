@@ -13,6 +13,7 @@ use App\Exceptions\ValidationException;
 use App\Models\Message;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use LRedis;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Validator;
 
@@ -78,7 +79,7 @@ class EloquentMessageRepository implements MessageRepositoryInterface
         $message[self::AMOUNT_BUY] = number_format($message[self::AMOUNT_BUY],2,'.','');
         $message[self::AMOUNT_SELL] = number_format($message[self::AMOUNT_SELL],2,'.','');
         $message[self::RATE] = number_format($message[self::RATE],4,'.','');
-        $redis = \LRedis::connection();
+        $redis = LRedis::connection();
         $redis->publish('message', $message->toJson());
     }
 
