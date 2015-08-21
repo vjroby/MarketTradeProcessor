@@ -7,7 +7,7 @@ Technologies used:
 - Blade as a template engine
 - Twitter Bootstrap 3.2
 - jQuery 1.11
-- Node.Js
+- Node.Js port 8890
 - Socket.IO
 - Redis as a queueing system
 - MySQL 5.6
