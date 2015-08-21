@@ -15,7 +15,7 @@ Technologies used:
 - Vagrant Ubuntu 14 64bit box
 - Jmeter 2.3 and Postman (Chrome extension) for API testing
 
-The project was develop in a Vagrant box.
+The project was develop in a Vagrant box. With Redis and Node (npm install express redis socket.io --save)
 The API method for receiving messages is POST /message.
 The message will be save in a database and put in the Redis queue. A Node.Js server is listening for the Redis messages.
 When a message is sent the Node.Js will sent the message through web socket using Socket.Io to all front end clients.
